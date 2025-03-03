@@ -1,7 +1,9 @@
-package com.example.AddressBook_App;
+package com.example.address_book_app;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class AddressBookAppApplication {
