@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
 @RequestMapping("/api/addressbook")
 public class AddressBookController {
@@ -23,7 +24,7 @@ public class AddressBookController {
     @Autowired
     private AddressBookService service;
 
-    @GetMapping
+    @GetMapping("/getContact")
     public ResponseEntity<List<AddressBookEntry>> getAllContacts() {
         return ResponseEntity.ok(service.getAllContacts());
     }
@@ -33,7 +34,7 @@ public class AddressBookController {
         return contact.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PostMapping
+    @PostMapping("/addContact")
     public ResponseEntity<AddressBookEntry> addContact(@RequestBody AddressBookEntry entry) {
         return ResponseEntity.ok(service.saveContact(entry));
     }
@@ -48,7 +49,6 @@ public class AddressBookController {
         return ResponseEntity.noContent().build();
     }
 
-
     //Uc_01 (Section -2)
     @GetMapping("/getEntry")
     public ResponseEntity<List<AddressBookEntry>> getAllEntries() {
@@ -58,5 +58,18 @@ public class AddressBookController {
     @PostMapping("/addEntry")
     public ResponseEntity<AddressBookEntry> addEntry(@RequestBody AddressBookDTO dto) {
         return ResponseEntity.ok(service.addEntry(dto));
+    }
+
+    //UC_02 (Section -2)
+    @PutMapping("/Entry/{id}")
+    public ResponseEntity<AddressBookEntry> updateEntry(@PathVariable Long id, @RequestBody AddressBookDTO dto) {
+        AddressBookEntry updatedEntry = service.updateEntry(id, dto);
+        return (updatedEntry != null) ? ResponseEntity.ok(updatedEntry) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
+        service.deleteEntry(id);
+        return ResponseEntity.noContent().build();
     }
 }

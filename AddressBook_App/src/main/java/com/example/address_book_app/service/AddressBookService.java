@@ -8,14 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class AddressBookService {
 
-    private final AddressBookRepository repository;
-
-    public AddressBookService(AddressBookRepository repository) {  // ✅ Constructor injection
-        this.repository = repository;
-    }
+    //Uc_02
+    @Autowired
+    private AddressBookRepository repository;
 
     public List<AddressBookEntry> getAllContacts() {
         return repository.findAll();
@@ -43,7 +42,7 @@ public class AddressBookService {
     }
 
 
-    //UC_ 01 (Section)
+    //UC_ 01 & Uc_02 (Section)
     public List<AddressBookEntry> getAllEntries() {
         return repository.findAll();
     }
@@ -56,4 +55,20 @@ public class AddressBookService {
         return repository.save(address);
     }
 
+    //Uc_02 (Section -2)
+    public AddressBookEntry updateEntry(Long id, AddressBookDTO dto) {
+        Optional<AddressBookEntry> existing = repository.findById(id);
+        if (existing.isPresent()) {
+            AddressBookEntry address = existing.get();
+            address.setName(dto.getName());
+            address.setPhone(dto.getPhone());
+            address.setEmail(dto.getEmail());
+            return repository.save(address);
+        }
+        return null;
+    }
+
+    public void deleteEntry(Long id) {
+        repository.deleteById(id);
+    }
 }
